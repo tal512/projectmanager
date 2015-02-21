@@ -1,11 +1,13 @@
-import dbClass
-import factoryClasses
+<?php
 
-create dbObject
-create factoryObjects passing dbObject
+$config = require getcwd() . '/../application/configs/application.php';
 
-parse request url into controller/action/params
+require_once getcwd() . '/../application/models/Database.php';
+$db = new Database($config['db']);
 
-import controllerClass
-create controllerObject passing dbObject, factoryObjects
-call controllerObject->action(params)
+$container = array(
+	'db' => $db,
+);
+
+require_once getcwd() . '/../application/RequestHandler.php';
+$request = new RequestHandler($container, $config['request']);
