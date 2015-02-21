@@ -12,9 +12,9 @@ class Database
 	 * @param string $password
 	 * @param string $database
 	 */
-	public function __construct($hostname, $username, $password, $database, $debug = false)
+	public function __construct($config)
 	{
-		$dsn = 'mysql:host=' . $hostname . ';dbname=' . $database;
+		$dsn = 'mysql:host=' . $config['hostname'] . ';dbname=' . $config['database'];
 		$options = [
 			PDO::ATTR_PERSISTENT => true,
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -22,9 +22,9 @@ class Database
 		];
 
 		try {
-			$this->handle = new PDO($dsn, $username, $password, $options);
+			$this->handle = new PDO($dsn, $config['username'], $config['password'], $options);
 		} catch (PDOException $e) {
-			if ($debug) {
+			if ($config['debug']) {
 				die($e->getMessage());
 			} else {
 				die('Database connection failed');
