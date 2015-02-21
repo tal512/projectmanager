@@ -1,7 +1,9 @@
 <?php
 
-class SiteController
+class SiteController extends Controller
 {
+	protected function loadDependencies() {}
+
 	public function actionIndex()
 	{
 		die('site:index');

@@ -2,9 +2,10 @@
 
 $config = require getcwd() . '/../application/configs/application.php';
 
+require_once getcwd() . '/../application/controllers/Controller.php';
 require_once getcwd() . '/../application/models/Database.php';
-$db = new Database($config['db']);
 
+$db = new Database($config['db']);
 $container = array(
 	'db' => $db,
 );
