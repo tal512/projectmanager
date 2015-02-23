@@ -17,8 +17,8 @@ class UserController extends Controller
 			$user = $db->query();
 
 			if ($user !== false && password_verify($password, $user['password'])) {
-				$publicKey = sha1($email . rand() . time());
-				$privateKey = sha1($email . rand() . time());
+				$publicKey = hash('sha256', mt_rand());
+				$privateKey = hash('sha256', mt_rand());
 
 				$sql = "UPDATE user SET public_key = :public_key AND private_key = :private_key WHERE email = :email";
 				$values = [
