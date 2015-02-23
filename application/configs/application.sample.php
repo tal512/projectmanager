@@ -5,9 +5,6 @@
  * Please rename this to application.php when you deploy the application
  **/
 return array(
-	'application' => array(
-		'baseDir' => 'projects/projectmanager',
-	),
 	'db' => array(
 		'hostname' => 'localhost',
 		'username' => 'root',
