@@ -53,7 +53,7 @@ class RequestHandler
 
 	protected function parseRequest()
 	{
-		$baseDir = substr(getcwd(), strlen($_SERVER['DOCUMENT_ROOT']));
+		$baseDir = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
 		$request = substr(urldecode($_SERVER['REQUEST_URI']), strlen($baseDir) + 1);
 
 		if (substr($request, -1) === '/') {
