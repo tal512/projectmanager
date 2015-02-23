@@ -20,7 +20,7 @@ class UserController extends Controller
 				$publicKey = hash('sha256', mt_rand());
 				$privateKey = hash('sha256', mt_rand());
 
-				$sql = "UPDATE user SET public_key = :public_key AND private_key = :private_key WHERE email = :email";
+				$sql = "UPDATE user SET public_key = :public_key, private_key = :private_key WHERE email = :email";
 				$values = [
 					':public_key' => $publicKey,
 					':private_key' => $privateKey,
