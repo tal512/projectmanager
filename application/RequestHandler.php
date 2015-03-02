@@ -2,8 +2,10 @@
 
 class RequestHandler
 {
+	private $appDir;
 	private $baseDir;
 
+	private $config;
 	private $container;
 
 	private $defaultController;
@@ -15,15 +17,17 @@ class RequestHandler
 
 	public function __construct(&$container, $config)
 	{
+		$this->appDir = $config['app']['dir'];
 		$this->baseDir = '';
+		$this->config = $config;
 		$this->container = $container;
 
-		$this->defaultController = $config['defaultController'];
-		$this->defaultAction = $config['defaultAction'];
+		$this->defaultController = $config['request']['defaultController'];
+		$this->defaultAction = $config['request']['defaultAction'];
 		$this->defaultParams = array();
 
-		$this->errorController = $config['errorController'];
-		$this->errorAction = $config['errorAction'];
+		$this->errorController = $config['request']['errorController'];
+		$this->errorAction = $config['request']['errorAction'];
 
 		$this->handle();
 	}
@@ -104,7 +108,7 @@ class RequestHandler
 
 	protected function loadController($requestParams)
 	{
-		$requestedClass = getcwd() . '/../application/controllers/' . $requestParams['controller'] . '.php';
+		$requestedClass = $this->appDir . '/controllers/' . $requestParams['controller'] . '.php';
 
 		$errorCode = false;
 		$errorMessage = '';
@@ -159,11 +163,11 @@ class RequestHandler
 
 	protected function loadErrorController($errorCode, $errorMessage)
 	{
-		$errorClass = getcwd() . '/../application/controllers/' . $this->errorController . '.php';
+		$errorClass = $this->appDir . '/controllers/' . $this->errorController . '.php';
 
 		if (file_exists($errorClass)) {
 			require_once $errorClass;
-			$controller = new $this->errorController($container);
+			$controller = new $this->errorController($this->container);
 			$action = $this->errorAction;
 			$params = array($errorCode, $errorMessage);
 			call_user_func_array(array($controller, $action), $params);

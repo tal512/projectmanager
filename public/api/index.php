@@ -1,14 +1,14 @@
 <?php
 
-$config = require getcwd() . '/../application/configs/application.php';
+$config = require '/../../application/configs/application.php';
 
-require_once getcwd() . '/../application/controllers/Controller.php';
-require_once getcwd() . '/../application/models/Database.php';
+require_once $config['app']['dir'] . '/controllers/Controller.php';
+require_once $config['app']['dir'] . '/models/Database.php';
 
 $db = new Database($config['db']);
 $container = array(
 	'db' => $db,
 );
 
-require_once getcwd() . '/../application/RequestHandler.php';
-$request = new RequestHandler($container, $config['request']);
+require_once $config['app']['dir'] . '/RequestHandler.php';
+$request = new RequestHandler($container, $config);
