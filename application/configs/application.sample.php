@@ -3,18 +3,21 @@
 /**
  * This is a SAMPLE application configuration file
  * Please rename this to application.php when you deploy the application
- **/
-return array(
-	'db' => array(
+ */
+return [
+	'app' => [
+		'dir' => substr(__FILE__, 0, -24),
+	],
+	'db' => [
 		'hostname' => 'localhost',
 		'username' => 'root',
 		'password' => '',
 		'database' => 'projectmanager',
-	),
-	'request' => array(
+	],
+	'request' => [
 		'defaultController' => 'SiteController',
 		'defaultAction' => 'actionIndex',
 		'errorController' => 'SiteController',
 		'errorAction' => 'actionError',
-	),
-);
+	],
+];
