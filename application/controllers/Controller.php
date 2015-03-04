@@ -1,13 +1,5 @@
 <?php
 
-abstract class Controller
+abstract class Controller extends BaseClass
 {
-	protected $container;
-
-	public function __construct(&$container) {
-		$this->container = $container;
-		$this->loadDependencies();
-	}
-
-	abstract protected function loadDependencies();
 }
