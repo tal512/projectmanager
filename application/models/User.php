@@ -10,20 +10,81 @@ class User extends Model
 	public $privateKey;
 	public $deleted;
 
-	protected function loadDependencies() {}
+	public $role;
+	public $checksum;
+
+	protected function loadDependencies()
+	{
+		parent::loadDependencies();
+	}
+
+	public function loadPost()
+	{
+		$post = [];
+
+		if (isset($_POST['id'])) {
+			$this->id = Validator::integer($_POST['id']);
+			$post['id'] = $this->id;
+		}
+		if (isset($_POST['email'])) {
+			$this->email = Validator::email($_POST['email']);
+			$post['email'] = $this->email;
+		}
+		if (isset($_POST['password'])) {
+			$this->password = $_POST['password'];
+			$post['password'] = $this->password;
+		}
+		if (isset($_POST['name'])) {
+			$this->name = Validator::string($_POST['name']);
+			$post['name'] = $this->name;
+		}
+		if (isset($_POST['checksum'])) {
+			$this->checksum = $_POST['checksum'];
+			$post['checksum'] = $this->checksum;
+		}
+
+		return $post;
+	}
 
 	public function getByEmail($email)
 	{
-		$values = [':email' => $email];
-		return $this->getUser($values);
+		if ($email !== '') {
+			$values = [':email' => $email];
+			return $this->getUser($values);
+		}
+		return false;
+	}
+
+	public function getById($id)
+	{
+		if ($id !== '') {
+			$values = [':id' => $id];
+			return $this->getUser($values);
+		}
+		return false;
+	}
+
+	public function getByPublicKey($publicKey)
+	{
+		if ($publicKey !== '') {
+			$values = [':public_key' => $publicKey];
+			return $this->getUser($values);
+		}
+		return false;
 	}
 
 	protected function getUser($values = [])
 	{
-		$sql = "SELECT id, email, password, name, public_key, private_key, deleted FROM user WHERE deleted = 0";
+		$sql = "SELECT u.id, u.email, u.password, u.name, u.public_key, u.private_key, u.deleted, r.name AS role"
+			. " FROM user AS u"
+			. " LEFT JOIN user_role AS ur ON ur.user_id = u.id AND ur.deleted = 0"
+			. " LEFT JOIN role AS r ON r.id = ur.role_id"
+			. " WHERE u.deleted = 0";
+
 		foreach ($values as $key => $value) {
-			$sql .= ' AND ' . substr($key, 1) . ' = ' . $key;
+			$sql .= ' AND u.' . substr($key, 1) . ' = ' . $key;
 		}
+
 		$this->db->prepare($sql, $values);
 		$user = $this->db->query();
 
@@ -35,6 +96,8 @@ class User extends Model
 			$this->publicKey = $user['public_key'];
 			$this->privateKey = $user['private_key'];
 			$this->deleted = $user['deleted'];
+
+			$this->role = $user['role'];
 
 			return true;
 		}
@@ -91,15 +154,14 @@ class User extends Model
 
 	public function validate()
 	{
-		$password = password_get_info($this->password);
 		$values = [
-			filter_var($this->id, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[0-9]+$/']]),
-			filter_var($this->email, FILTER_VALIDATE_EMAIL),
-			($password['algo'] !== 0) ? true : false,
-			filter_var($this->name, FILTER_SANITIZE_FULL_SPECIAL_CHARS),
-			filter_var($this->publicKey, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[a-f0-9]*$/']]),
-			filter_var($this->privateKey, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[a-f0-9]*$/']]),
-			filter_var($this->deleted, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[0-9]{1}$/']]),
+			Validator::integer($this->id),
+			Validator::email($this->email),
+			Validator::password($this->password),
+			Validator::string($this->name),
+			Validator::hexadecimal($this->publicKey),
+			Validator::hexadecimal($this->privateKey),
+			Validator::booleanInteger($this->deleted),
 		];
 
 		if (in_array(false, $values, true)) {
@@ -110,12 +172,20 @@ class User extends Model
 
 	public function assignRole($roleId)
 	{
-		$sql = "INSERT INTO user_role (user_id, role_id) VALUES (:user_id, :role_id)";
-		$values = [
-			':user_id' => $this->id,
-			':role_id' => $roleId,
-		];
+		$sql = "UPDATE user_role SET deleted = 1 WHERE user_id = :user_id";
+		$values = [':user_id' => $this->id];
 		$this->db->prepare($sql, $values);
-		return $this->db->execute();
+
+		if ($this->db->execute()) {
+			$sql = "INSERT INTO user_role (user_id, role_id) VALUES (:user_id, :role_id)";
+			$values = [
+				':user_id' => $this->id,
+				':role_id' => $roleId,
+			];
+			$this->db->prepare($sql, $values);
+			return $this->db->execute();
+		}
+
+		return false;
 	}
 }
