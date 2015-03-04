@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Project Manager",
+    "description": "For managing projects and tasks",
+    "deleted": 0,
+    "status": "open"
+  },
+  {
+    "id": 2,
+    "name": "Draftquiz",
+    "description": "Guess the winner of Dota 2 match",
+    "deleted": 0,
+    "status": "closed"
+  },
+  {
+    "id": 3,
+    "name": "Planetwot",
+    "description": "World of Tanks stats tracker",
+    "deleted": 1,
+    "status": "closed"
+  }
+]
