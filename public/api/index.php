@@ -15,6 +15,7 @@ foreach ($requires as $requiredFile) {
 
 $db = new Database($config['db']);
 $container = array(
+	'config' => $config,
 	'db' => $db,
 );
 
