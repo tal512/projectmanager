@@ -14,5 +14,15 @@
 <input type="submit">
 </form>
 
+<form method="post" action="user/update">
+<input type="text" name="id" placeholder="id">
+<input type="text" name="email" placeholder="email">
+<input type="text" name="password" placeholder="password">
+<input type="text" name="name" placeholder="name">
+<input type="text" name="publicKey" placeholder="publicKey">
+<input type="text" name="checksum" placeholder="checksum">
+<input type="submit">
+</form>
+
 </body>
 </html>
