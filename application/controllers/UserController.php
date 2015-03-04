@@ -4,6 +4,7 @@ class UserController extends Controller
 {
 	protected function loadDependencies()
 	{
+		require_once $this->config['app']['dir'] . '/models/Role.php';
 		require_once $this->config['app']['dir'] . '/models/User.php';
 	}
 
@@ -38,31 +39,27 @@ class UserController extends Controller
 
 	public function actionRegister()
 	{
-		$db = $this->container['db'];
-		$db->beginTransaction();
+		$this->db->beginTransaction();
 
 		if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['name'])) {
 			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			$password = $_POST['password'];
 			$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-			$user = $this->getUserByEmail($email);
+			$user = new User($this->container);
+			$role = new Role($this->container);
 
-			if ($user === false && $this->registerUser($email, $password, $name)) {
-				$userId = $db->lastInsertId();
-				if ($this->registerRole($userId, 'member')) {
-					echo json_encode([
-						'status' => 'success',
-						'message' => 'User registered',
-					]);
-					$db->endTransaction();
-					die;
-				}
+			if ($user->getByEmail($email) === false && $role->getByName('member') !== false && $user->create($email, $password, $name) && $user->assignRole($role->id)) {
+				$this->db->endTransaction();
+				$this->renderJson([
+					'status' => 'success',
+					'message' => 'User registered',
+				]);
 			}
 		}
 
-		$db->cancelTransaction();
-		echo json_encode([
+		$this->db->cancelTransaction();
+		$this->renderJson([
 			'status' => 'error',
 			'message' => 'Register failed',
 		]);

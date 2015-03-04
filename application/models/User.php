@@ -41,6 +41,34 @@ class User extends Model
 		return false;
 	}
 
+	public function create($email, $password, $name)
+	{
+		$this->id = 0;
+		$this->email = $email;
+		$this->password = password_hash($password, PASSWORD_DEFAULT);
+		$this->name = $name;
+		$this->publicKey = '';
+		$this->privateKey = '';
+		$this->deleted = 0;
+
+		if ($this->validate()) {
+			$sql = "INSERT INTO user (email, password, name) VALUES (:email, :password, :name)";
+			$values = [
+				':email' => $this->email,
+				':password' => $this->password,
+				':name' => $this->name,
+			];
+			$this->db->prepare($sql, $values);
+
+			if ($this->db->execute()) {
+				$this->id = $this->db->lastInsertId();
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	public function save()
 	{
 		if ($this->validate()) {
@@ -78,5 +106,16 @@ class User extends Model
 			return false;
 		}
 		return true;
+	}
+
+	public function assignRole($roleId)
+	{
+		$sql = "INSERT INTO user_role (user_id, role_id) VALUES (:user_id, :role_id)";
+		$values = [
+			':user_id' => $this->id,
+			':role_id' => $roleId,
+		];
+		$this->db->prepare($sql, $values);
+		return $this->db->execute();
 	}
 }
