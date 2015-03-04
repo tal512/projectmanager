@@ -12,7 +12,7 @@ class UserController extends Controller
 	public function actionLogin()
 	{
 		if (isset($_POST['email']) && isset($_POST['password'])) {
-			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+			$email = Validator::email($_POST['email']);
 			$password = $_POST['password'];
 
 			$user = new User($this->container);
@@ -43,9 +43,9 @@ class UserController extends Controller
 		$this->db->beginTransaction();
 
 		if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['name'])) {
-			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+			$email = Validator::email($_POST['email']);
 			$password = $_POST['password'];
-			$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+			$name = Validator::string($_POST['email']);
 
 			$user = new User($this->container);
 			$role = new Role($this->container);
