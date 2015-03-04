@@ -2,7 +2,10 @@
 
 class UserController extends Controller
 {
-	protected function loadDependencies() {}
+	protected function loadDependencies()
+	{
+		require_once $this->config['app']['dir'] . '/models/User.php';
+	}
 
 	public function actionLogin()
 	{
@@ -10,37 +13,24 @@ class UserController extends Controller
 			$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 			$password = $_POST['password'];
 
-			$db = $this->container['db'];
-			$sql = "SELECT email, password FROM user WHERE email = :email";
-			$values = [':email' => $email];
-			$db->prepare($sql, $values);
-			$user = $db->query();
+			$user = new User($this->container);
 
-			if ($user !== false && password_verify($password, $user['password'])) {
-				$publicKey = hash('sha256', mt_rand());
-				$privateKey = hash('sha256', mt_rand());
+			if ($user->getByEmail($email) !== false && password_verify($password, $user->password)) {
+				$user->publicKey = hash('sha256', mt_rand());
+				$user->privateKey = hash('sha256', mt_rand());
 
-				$sql = "UPDATE user SET public_key = :public_key, private_key = :private_key WHERE email = :email AND deleted = 0";
-				$values = [
-					':public_key' => $publicKey,
-					':private_key' => $privateKey,
-					':email' => $email
-				];
-				$db->prepare($sql, $values);
-
-				if ($db->execute()) {
-					echo json_encode([
+				if ($user->save()) {
+					$this->renderJson([
 						'status' => 'success',
 						'message' => 'User logged in',
-						'publicKey' => $publicKey,
-						'privateKey' => $privateKey,
+						'publicKey' => $user->publicKey,
+						'privateKey' => $user->privateKey,
 					]);
-					die;
 				}
 			}
 		}
 
-		echo json_encode([
+		$this->renderJson([
 			'status' => 'error',
 			'message' => 'Authentication failed',
 		]);
