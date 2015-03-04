@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="projectManagerApp">
 <head>
 	<meta charset="utf-8">
 	<title>Project Manager</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
+	<script src="app/app.js"></script>
+	<script src="app/home/controllers/homeControllers.js"></script>
+	<script src="app/project/controllers/projectControllers.js"></script>
+	<script src="app/project/services/projectServices.js"></script>
 </head>
 <body>
-	<p>Here shall be super awesome {{'Project' + ' ' + 'Manager'}} software!</p>
+	<h1>Project Manager</h1>
+	<a href="#">Home</a> - <a href="#/projects">View projects</a>
+	<div ng-view></div>
 </body>
 </html>
