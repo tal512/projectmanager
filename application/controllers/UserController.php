@@ -38,6 +38,32 @@ class UserController extends Controller
 		]);
 	}
 
+	public function actionLogout()
+	{
+		if (isset($_POST['publicKey'])) {
+			$publicKey = Validator::hexadecimal($_POST['publicKey']);
+
+			$user = new User($this->container);
+
+			if ($user->getByPublicKey($publicKey) !== false) {
+				$user->publicKey = '';
+				$user->privateKey = '';
+
+				if ($user->save()) {
+					$this->renderJson([
+						'status' => 'success',
+						'message' => 'User logged out',
+					]);
+				}
+			}
+		}
+
+		$this->renderJson([
+			'status' => 'error',
+			'message' => 'Logout failed',
+		]);
+	}
+
 	public function actionRegister()
 	{
 		$this->db->beginTransaction();
