@@ -1,13 +1,9 @@
-// Create a new module, projectControllers
-var projectControllers = angular.module('projectControllers', []);
+// Create a new module, projectControllers, which uses projectServices
+var projectControllers = angular.module('projectControllers', ['projectServices']);
 
 /**
- * Controller for listing Projects
- * @todo implement fetching the data to projectServices, like in
- *   https://docs.angularjs.org/tutorial/step_11
+ * Controller for listing all Projects
  **/
-projectControllers.controller('ProjectListCtrl', ['$scope', '$http', function($scope, $http) {
-	$http.get('api/testdata/projects.json').success(function(data) {
-		$scope.projects = data;
-	});
+projectControllers.controller('ProjectListCtrl', ['$scope', 'Projects', function($scope, Projects) {
+	$scope.projects = Projects.query();
 }]);
