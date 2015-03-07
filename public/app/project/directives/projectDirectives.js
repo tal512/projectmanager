@@ -1,7 +1,11 @@
 var projectDirectives = angular.module('projectDirectives', []);
 
+/**
+ * This is more of a proof of concept, not really sure we should use
+ * directive here
+ **/
 projectDirectives.directive('projectListItemLarge', function () {
 	return {
-			template: '{{project.name}} - {{project.description}}'
+			template: '<h3>{{project.name}}</h3><p>{{project.description}}</p>'
 	};
 });
