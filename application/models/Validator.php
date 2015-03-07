@@ -16,9 +16,13 @@ class Validator
 		return filter_var($value, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[a-f0-9]*$/']]);
 	}
 
-	public static function integer($value)
+	public static function integer($value, $allowEmpty = false)
 	{
-		return filter_var($value, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[0-9]+$/']]);
+		if ($allowEmpty === true) {
+			return filter_var($value, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[0-9]+$/']]) || $value === null;
+		} else {
+			return filter_var($value, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[0-9]+$/']]);
+		}
 	}
 
 	public static function password($value)
