@@ -2,14 +2,6 @@
 
 class User extends Model
 {
-	public $id;
-	public $email;
-	public $password;
-	public $name;
-	public $publicKey;
-	public $privateKey;
-	public $deleted;
-
 	public $role;
 	public $checksum;
 
@@ -18,32 +10,17 @@ class User extends Model
 		parent::loadDependencies();
 	}
 
-	public function loadPost()
+	protected function setRules()
 	{
-		$post = [];
-
-		if (isset($_POST['id'])) {
-			$this->id = Validator::integer($_POST['id']);
-			$post['id'] = $this->id;
-		}
-		if (isset($_POST['email'])) {
-			$this->email = Validator::email($_POST['email']);
-			$post['email'] = $this->email;
-		}
-		if (isset($_POST['password'])) {
-			$this->password = $_POST['password'];
-			$post['password'] = $this->password;
-		}
-		if (isset($_POST['name'])) {
-			$this->name = Validator::string($_POST['name']);
-			$post['name'] = $this->name;
-		}
-		if (isset($_POST['checksum'])) {
-			$this->checksum = $_POST['checksum'];
-			$post['checksum'] = $this->checksum;
-		}
-
-		return $post;
+		$this->rules = [
+			'id' => 'integer',
+			'email' => 'email',
+			'password' => 'safe',
+			'name' => 'string',
+			'publicKey' => 'hexadecimal',
+			'privateKey' => 'hexadecimal',
+			'deleted' => 'boolean',
+		];
 	}
 
 	public function getByEmail($email)
