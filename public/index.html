@@ -4,28 +4,29 @@
 	<meta charset="utf-8">
 	<title>Project Manager</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	
+
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-	
+
 	<link rel="stylesheet" href="app/shared/styles/common.css">
-	
+
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	
+
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-resource.min.js"></script>
-	
+
 	<script src="app/vendor/angularUi/ui-bootstrap-tpls-0.12.1.min.js"></script>
-	
+	<script src="app/vendor/angularUi/ui-router-0.2.13.min.js"></script>
+
 	<script src="app/app.js"></script>
 	<script src="app/home/controllers/homeControllers.js"></script>
-	
+
 	<script src="app/project/controllers/projectControllers.js"></script>
 	<script src="app/project/services/projectServices.js"></script>
 	<script src="app/project/directives/projectDirectives.js"></script>
 	<link rel="stylesheet" href="app/project/styles/project.css">
-	
+
 	<script src="app/shared/controllers/navigationControllers.js"></script>
 </head>
 <body>
@@ -45,15 +46,15 @@
 					<li ng-class="{ active: isActive('/')}"><a href="#/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
 					<li ng-class="{ active: isActive('/projects')}"><a href="#/projects"><span class="glyphicon glyphicon-folder-open"></span> Projects</a></li>
 				</ul>
-				<div class="nav navbar-nav navbar-right">					
+				<div class="nav navbar-nav navbar-right">
 					<button type="button" class="btn btn-default navbar-btn">Sign in</button>
 				</div>
-				
+
 			</div><!--/.nav-collapse -->
 	  </div>
 	</nav>
 	<div class="container">
-		<div ng-view></div>
+		<div ui-view></div>
 	</div>
 </body>
 </html>
