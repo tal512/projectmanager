@@ -6,6 +6,12 @@ class Role extends Model
 	public $name;
 
 	protected function loadDependencies() {}
+	protected function setRules() {}
+
+	protected function getTableName()
+	{
+		return 'role';
+	}
 
 	public function getByName($name)
 	{
