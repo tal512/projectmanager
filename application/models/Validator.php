@@ -31,6 +31,11 @@ class Validator
 		return ($password['algo'] !== 0) ? true : false;
 	}
 
+	public static function safe($value)
+	{
+		return $value;
+	}
+
 	public static function string($value)
 	{
 		return filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
