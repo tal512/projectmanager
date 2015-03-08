@@ -6,7 +6,6 @@ abstract class Model extends BaseClass
 	protected $rules;
 
 	abstract public function save();
-	abstract public function validate();
 	abstract protected function setRules();
 
 	public function __construct(&$container) {
@@ -30,6 +29,17 @@ abstract class Model extends BaseClass
 			}
 		}
 		return $post;
+	}
+
+	public function validate()
+	{
+		foreach ($this->attributes as $name => $value) {
+			$validator = $this->rules[$name];
+			if (Validator::$validator($value) === false) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public function __get($name)

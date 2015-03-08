@@ -19,7 +19,7 @@ class User extends Model
 			'name' => 'string',
 			'publicKey' => 'hexadecimal',
 			'privateKey' => 'hexadecimal',
-			'deleted' => 'boolean',
+			'deleted' => 'booleanInteger',
 		];
 	}
 
@@ -127,24 +127,6 @@ class User extends Model
 			return $this->db->execute();
 		}
 		return false;
-	}
-
-	public function validate()
-	{
-		$values = [
-			Validator::integer($this->id),
-			Validator::email($this->email),
-			Validator::password($this->password),
-			Validator::string($this->name),
-			Validator::hexadecimal($this->publicKey),
-			Validator::hexadecimal($this->privateKey),
-			Validator::booleanInteger($this->deleted),
-		];
-
-		if (in_array(false, $values, true)) {
-			return false;
-		}
-		return true;
 	}
 
 	public function assignRole($roleId)
