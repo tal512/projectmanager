@@ -5,6 +5,11 @@ class User extends Model
 	public $role;
 	public $checksum;
 
+	protected function getTableName()
+	{
+		return 'role';
+	}
+
 	protected function loadDependencies()
 	{
 		parent::loadDependencies();
