@@ -5,7 +5,7 @@ abstract class Model extends BaseClass
 	protected $attributes;
 	protected $rules;
 
-	abstract public function save();
+	abstract protected function getTableName();
 	abstract protected function setRules();
 
 	public function __construct(&$container) {
