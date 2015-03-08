@@ -42,6 +42,25 @@ abstract class Model extends BaseClass
 		return true;
 	}
 
+	public function save()
+	{
+		if ($this->validate()) {
+			$sql = "UPDATE " . $this->getTableName() . " SET ";
+			$set = [];
+			$values = [':id2' => $this->id];
+			foreach ($this->attributes as $name => $value) {
+				$underscoredName = $this->camelCaseToUnderscore($name);
+				$set[] = "{$underscoredName} = :{$underscoredName}";
+				$values[":{$underscoredName}"] = $value;
+			}
+			$sql .= implode(', ', $set);
+			$sql .= " WHERE id = :id2";
+			$this->db->prepare($sql, $values);
+			return $this->db->execute();
+		}
+		return false;
+	}
+
 	public function __get($name)
 	{
 		return $this->attributes[$name];
