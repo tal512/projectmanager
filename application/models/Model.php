@@ -20,11 +20,11 @@ abstract class Model extends BaseClass
 	public function loadPost()
 	{
 		$post = [];
-		foreach (array_keys($rules) as $attribute) {
+		foreach (array_keys($this->rules) as $attribute) {
 			if (isset($_POST[$attribute])) {
-				$attribute = $_POST[$attribute];
-				$validator = $rules[$attribute];
-				$this->$attribute = Validator::$validator($attribute);
+				$value = $_POST[$attribute];
+				$validator = $this->rules[$attribute];
+				$this->$attribute = Validator::$validator($value);
 				$post[$attribute] = $this->$attribute;
 			}
 		}
