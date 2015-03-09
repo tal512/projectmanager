@@ -22,14 +22,13 @@
 <input type="text" name="email" placeholder="email">
 <input type="text" name="password" placeholder="password">
 <input type="text" name="name" placeholder="name">
-<input type="text" name="publicKey" placeholder="publicKey">
-<input type="text" name="checksum" placeholder="checksum">
+<input type="text" name="authKey" placeholder="authKey">
 <input type="submit">
 </form>
 
 <span>Logout</span>
 <form method="post" action="user/logout">
-<input type="text" name="publicKey" placeholder="publicKey">
+<input type="text" name="authKey" placeholder="authKey">
 <input type="submit">
 </form>
 

@@ -18,15 +18,13 @@ class UserController extends Controller
 			$user = new User($this->container);
 
 			if ($user->getByEmail($email) !== false && password_verify($password, $user->password)) {
-				$user->publicKey = hash('sha256', mt_rand());
-				$user->privateKey = hash('sha256', mt_rand());
+				$user->authKey = hash('sha256', mt_rand());
 
 				if ($user->save()) {
 					$this->renderJson([
 						'status' => 'success',
 						'message' => 'User logged in',
-						'publicKey' => $user->publicKey,
-						'privateKey' => $user->privateKey,
+						'authKey' => $user->authKey,
 					]);
 				}
 			}
@@ -40,14 +38,13 @@ class UserController extends Controller
 
 	public function actionLogout()
 	{
-		if (isset($_POST['publicKey'])) {
-			$publicKey = Validator::hexadecimal($_POST['publicKey']);
+		if (isset($_POST['authKey'])) {
+			$authKey = Validator::hexadecimal($_POST['authKey']);
 
 			$user = new User($this->container);
 
-			if ($user->getByPublicKey($publicKey) !== false) {
-				$user->publicKey = '';
-				$user->privateKey = '';
+			if ($user->getByAuthKey($authKey) !== false) {
+				$user->authKey = '';
 
 				if ($user->save()) {
 					$this->renderJson([
@@ -96,14 +93,15 @@ class UserController extends Controller
 	{
 		$this->db->beginTransaction();
 
-		if (isset($_POST['publicKey']) && isset($_POST['checksum']) && isset($_POST['id'])) {
-			$publicKey = Validator::hexadecimal($_POST['publicKey']);
+		if (isset($_POST['authKey']) && isset($_POST['id'])) {
+			$authKey = Validator::hexadecimal($_POST['authKey']);
 			$id = Validator::integer($_POST['id']);
 
 			$updater = new User($this->container);
 			$updatee = new User($this->container);
 
-			if ($updater->getByPublicKey($publicKey) !== false && ($updater->role === 'admin' || $updater->id === $id) && $updatee->getById($id) !== false && $this->validateUserUpdate($updater, $updatee) !== false) {
+			if ($updater->getByAuthKey($authKey) !== false && ($updater->role === 'admin' || $updater->id === $id) && $updatee->getById($id) !== false) {
+				$updatee->loadPost();
 				$updatee->password = password_hash($updatee->password, PASSWORD_DEFAULT);
 				if ($updatee->save()) {
 					$this->db->endTransaction();
@@ -120,30 +118,5 @@ class UserController extends Controller
 			'status' => 'error',
 			'message' => 'Update failed',
 		]);
-	}
-
-	private function validateUserUpdate($updater, $updatee)
-	{
-		$post = $updatee->loadPost();
-
-		$checksum = '';
-		if (isset($post['id'])) {
-			$checksum .= $post['id'];
-		}
-		if (isset($post['email'])) {
-			$checksum .= $post['email'];
-		}
-		if (isset($post['password'])) {
-			$checksum .= $post['password'];
-		}
-		if (isset($post['name'])) {
-			$checksum .= $post['name'];
-		}
-		$checksum = hash_hmac('sha256', $checksum, $updater->privateKey);
-
-		if ($checksum === $post['checksum']) {
-			return true;
-		}
-		return false;
 	}
 }

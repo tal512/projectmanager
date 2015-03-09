@@ -22,8 +22,7 @@ class User extends Model
 			'email' => 'email',
 			'password' => 'safe',
 			'name' => 'string',
-			'publicKey' => 'hexadecimal',
-			'privateKey' => 'hexadecimal',
+			'authKey' => 'hexadecimal',
 			'deleted' => 'booleanInteger',
 		];
 	}
@@ -46,10 +45,10 @@ class User extends Model
 		return false;
 	}
 
-	public function getByPublicKey($publicKey)
+	public function getByAuthKey($authKey)
 	{
-		if ($publicKey !== '') {
-			$values = [':public_key' => $publicKey];
+		if ($authKey !== '') {
+			$values = [':authKey' => $authKey];
 			return $this->getUser($values);
 		}
 		return false;
@@ -57,14 +56,14 @@ class User extends Model
 
 	protected function getUser($values = [])
 	{
-		$sql = "SELECT u.id, u.email, u.password, u.name, u.public_key, u.private_key, u.deleted, r.name AS role"
+		$sql = "SELECT u.id, u.email, u.password, u.name, u.auth_key, u.deleted, r.name AS role"
 			. " FROM user AS u"
 			. " LEFT JOIN user_role AS ur ON ur.user_id = u.id AND ur.deleted = 0"
 			. " LEFT JOIN role AS r ON r.id = ur.role_id"
 			. " WHERE u.deleted = 0";
 
 		foreach ($values as $key => $value) {
-			$sql .= ' AND u.' . substr($key, 1) . ' = ' . $key;
+			$sql .= ' AND u.' . $this->camelCaseToUnderscore(substr($key, 1)) . ' = ' . $key;
 		}
 
 		$this->db->prepare($sql, $values);
@@ -75,8 +74,7 @@ class User extends Model
 			$this->email = $user['email'];
 			$this->password = $user['password'];
 			$this->name = $user['name'];
-			$this->publicKey = $user['public_key'];
-			$this->privateKey = $user['private_key'];
+			$this->authKey = $user['auth_key'];
 			$this->deleted = $user['deleted'];
 
 			$this->role = $user['role'];
@@ -92,8 +90,7 @@ class User extends Model
 		$this->email = $email;
 		$this->password = password_hash($password, PASSWORD_DEFAULT);
 		$this->name = $name;
-		$this->publicKey = '';
-		$this->privateKey = '';
+		$this->authKey = '';
 		$this->deleted = 0;
 
 		if ($this->validate()) {
