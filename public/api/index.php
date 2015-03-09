@@ -1,6 +1,6 @@
 <?php
 
-$config = require '/../../application/configs/application.php';
+$config = require '../../application/configs/application.php';
 
 $requires = [
 	'/BaseClass.php',
