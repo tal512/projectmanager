@@ -2,6 +2,12 @@
 
 $config = require '../../application/configs/application.php';
 
+/**
+ * Provides compability for PHP >= 5.3.7
+ * https://github.com/ircmaxell/password_compat
+ */
+require '../../lib/password_compat/password.php';
+
 $requires = [
 	'/BaseClass.php',
 	'/controllers/Controller.php',
