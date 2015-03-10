@@ -5,13 +5,13 @@ class Role extends Model
 	public $id;
 	public $name;
 
+	public static function getTableName($prefix = '')
+	{
+		return $prefix . 'role';
+	}
+
 	protected function loadDependencies() {}
 	protected function setRules() {}
-
-	protected function getTableName()
-	{
-		return 'role';
-	}
 
 	public function getByName($name)
 	{

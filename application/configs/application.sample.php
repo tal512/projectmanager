@@ -13,6 +13,7 @@ return [
 		'username' => 'root',
 		'password' => '',
 		'database' => 'projectmanager',
+		'prefix' => '',
 	],
 	'request' => [
 		'defaultController' => 'SiteController',

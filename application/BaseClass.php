@@ -31,5 +31,10 @@ abstract class BaseClass
 		}
 	}
 
+	public function getTable($model)
+	{
+		return $model::getTableName($this->config['db']['prefix']);
+	}
+
 	abstract protected function loadDependencies();
 }

@@ -5,9 +5,9 @@ class User extends Model
 	public $role;
 	public $checksum;
 
-	protected function getTableName()
+	public static function getTableName($prefix = '')
 	{
-		return 'user';
+		return $prefix . 'user';
 	}
 
 	protected function loadDependencies()
