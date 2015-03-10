@@ -1,11 +1,19 @@
 <?php
 
-abstract class Model extends BaseClass
+interface TableNameInterface {
+	/**
+	* getTableName is not recommended way to get table name for model, please see
+	* BaseClass getTable -function
+	*/
+	public static function getTableName();
+}
+
+
+abstract class Model extends BaseClass implements TableNameInterface
 {
 	protected $attributes;
 	protected $rules;
 
-	abstract public static function getTableName();
 	abstract protected function setRules();
 
 	public function __construct(&$container) {
