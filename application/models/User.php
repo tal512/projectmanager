@@ -59,7 +59,7 @@ class User extends Model
 		$sql = "SELECT u.id, u.email, u.password, u.name, u.auth_key, u.deleted, r.name AS role"
 			. " FROM " . $this->getTable('User') . " AS u"
 			. " LEFT JOIN " . $this->getTable('User') . "_role AS ur ON ur.user_id = u.id AND ur.deleted = 0"
-			. " LEFT JOIN " . $this->getTable('User') . " AS r ON r.id = ur.role_id"
+			. " LEFT JOIN " . $this->getTable('Role') . " AS r ON r.id = ur.role_id"
 			. " WHERE u.deleted = 0";
 
 		foreach ($values as $key => $value) {
