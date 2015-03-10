@@ -21,7 +21,7 @@ class Role extends Model
 
 	protected function getRole($values = [])
 	{
-		$sql = "SELECT id, name FROM role WHERE 1";
+		$sql = "SELECT id, name FROM " . $this->getTable('Role') . " WHERE 1";
 		foreach ($values as $key => $value) {
 			$sql .= ' AND ' . substr($key, 1) . ' = ' . $key;
 		}

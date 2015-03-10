@@ -57,9 +57,9 @@ class User extends Model
 	protected function getUser($values = [])
 	{
 		$sql = "SELECT u.id, u.email, u.password, u.name, u.auth_key, u.deleted, r.name AS role"
-			. " FROM user AS u"
-			. " LEFT JOIN user_role AS ur ON ur.user_id = u.id AND ur.deleted = 0"
-			. " LEFT JOIN role AS r ON r.id = ur.role_id"
+			. " FROM " . $this->getTable('User') . " AS u"
+			. " LEFT JOIN " . $this->getTable('User') . "_role AS ur ON ur.user_id = u.id AND ur.deleted = 0"
+			. " LEFT JOIN " . $this->getTable('User') . " AS r ON r.id = ur.role_id"
 			. " WHERE u.deleted = 0";
 
 		foreach ($values as $key => $value) {
@@ -94,7 +94,7 @@ class User extends Model
 		$this->deleted = 0;
 
 		if ($this->validate()) {
-			$sql = "INSERT INTO user (email, password, name) VALUES (:email, :password, :name)";
+			$sql = "INSERT INTO " . $this->getTable('User') . " (email, password, name) VALUES (:email, :password, :name)";
 			$values = [
 				':email' => $this->email,
 				':password' => $this->password,
@@ -113,12 +113,12 @@ class User extends Model
 
 	public function assignRole($roleId)
 	{
-		$sql = "UPDATE user_role SET deleted = 1 WHERE user_id = :user_id";
+		$sql = "UPDATE " . $this->getTable('User') . "_role SET deleted = 1 WHERE user_id = :user_id";
 		$values = [':user_id' => $this->id];
 		$this->db->prepare($sql, $values);
 
 		if ($this->db->execute()) {
-			$sql = "INSERT INTO user_role (user_id, role_id) VALUES (:user_id, :role_id)";
+			$sql = "INSERT INTO " . $this->getTable('User') . "_role (user_id, role_id) VALUES (:user_id, :role_id)";
 			$values = [
 				':user_id' => $this->id,
 				':role_id' => $roleId,

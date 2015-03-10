@@ -51,8 +51,8 @@ class Project extends Model
 	protected function getProject($values = [])
 	{
 		$sql = "SELECT p.id, p.project_status_id, p.name, p.description, p.deleted, ps.name AS project_status"
-			. " FROM project AS p"
-			. " LEFT JOIN project_status AS ps ON ps.id = p.project_status_id"
+			. " FROM " . $this->getTable('Project') . " AS p"
+			. " LEFT JOIN " . $this->getTable('Project') . "_status AS ps ON ps.id = p.project_status_id"
 			. " WHERE p.deleted = 0";
 
 		foreach ($values as $key => $value) {
@@ -85,7 +85,7 @@ class Project extends Model
 		$this->deleted = 0;
 
 		if ($this->validate()) {
-			$sql = "INSERT INTO project (project_status_id, name, description) VALUES (:project_status_id, :name, :description)";
+			$sql = "INSERT INTO " . $this->getTable('Project') . " (project_status_id, name, description) VALUES (:project_status_id, :name, :description)";
 			$values = [
 				':project_status_id' => $this->projectStatusId,
 				':name' => $this->name,
@@ -105,7 +105,7 @@ class Project extends Model
 	public function save()
 	{
 		if ($this->validate()) {
-			$sql = "UPDATE project SET id = :id, project_status_id = :project_status_id, name = :name, description = :description, deleted = :deleted WHERE id = :id2";
+			$sql = "UPDATE " . $this->getTable('Project') . " SET id = :id, project_status_id = :project_status_id, name = :name, description = :description, deleted = :deleted WHERE id = :id2";
 			$values = [
 				':id' => $this->id,
 				':project_status_id' => $this->projectStatusId,
