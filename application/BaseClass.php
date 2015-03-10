@@ -31,6 +31,10 @@ abstract class BaseClass
 		}
 	}
 
+	/**
+	 * Recommended way to get Table name for model, as it injects the config's
+	 * table prefix
+	 */
 	public function getTable($model)
 	{
 		return $model::getTableName($this->config['db']['prefix']);
