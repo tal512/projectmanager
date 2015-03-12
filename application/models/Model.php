@@ -53,7 +53,7 @@ abstract class Model extends BaseClass implements TableNameInterface
 	public function save()
 	{
 		if ($this->validate()) {
-			$sql = "UPDATE " . $this->getTableName() . " SET ";
+			$sql = "UPDATE " . $this->getTableName($this->config['db']['prefix']) . " SET ";
 			$set = [];
 			$values = [':id2' => $this->id];
 			foreach ($this->attributes as $name => $value) {
