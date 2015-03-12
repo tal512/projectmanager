@@ -27,6 +27,8 @@
 	<script src="app/project/directives/projectDirectives.js"></script>
 	<link rel="stylesheet" href="app/project/styles/project.css">
 
+	<script src="app/auth/controllers/authControllers.js"></script>
+
 	<script src="app/shared/controllers/navigationControllers.js"></script>
 </head>
 <body>
@@ -47,7 +49,7 @@
 					<li ng-class="{ active: isActive('/projects')}"><a href="#/projects"><span class="glyphicon glyphicon-folder-open"></span> Projects</a></li>
 				</ul>
 				<div class="nav navbar-nav navbar-right">
-					<button type="button" class="btn btn-default navbar-btn">Sign in</button>
+					<a  class="btn btn-default navbar-btn" href="#/login">Sign in</a>
 				</div>
 
 			</div><!--/.nav-collapse -->

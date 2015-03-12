@@ -6,7 +6,8 @@ var projectManagerApp = angular.module('projectManagerApp', ['ui.router',
 	'projectControllers',
 	'projectServices',
 	'projectDirectives',
-	'navigationControllers']);
+	'navigationControllers',
+	'authControllers']);
 
 projectManagerApp.run(['$rootScope', '$state', '$stateParams', function ($rootScope,   $state,   $stateParams) {
 	// It's very handy to add references to $state and $stateParams to the $rootScope
@@ -37,6 +38,14 @@ projectManagerApp.config(['$stateProvider', '$urlRouterProvider', function ($sta
 		controller: 'ProjectListCtrl',
 		data: {
 			requireLogin: true
+		}
+	})
+	.state('login', {
+		url: '/login',
+		templateUrl: 'app/auth/views/login.html',
+		controller: 'LoginCtrl',
+		data: {
+			requireLogin: false
 		}
 	})
 	.state('welcome', {
