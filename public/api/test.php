@@ -32,5 +32,12 @@
 <input type="submit">
 </form>
 
+<span>Create project</span>
+<form method="post" action="project/create">
+<input type="text" name="name" placeholder="name">
+<input type="text" name="description" placeholder="description">
+<input type="submit">
+</form>
+
 </body>
 </html>

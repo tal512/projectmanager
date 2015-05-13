@@ -10,9 +10,25 @@ class Project extends Model
 
 	public $projectStatus;
 
+	public static function getTableName($prefix = '')
+	{
+		return $prefix . 'project';
+	}
+
 	protected function loadDependencies()
 	{
 		parent::loadDependencies();
+	}
+
+	protected function setRules()
+	{
+		$this->rules = [
+			'id' => 'integer',
+			'projectStatusId' => 'integer',
+			'name' => 'string',
+			'description' => 'string',
+			'deleted' => 'booleanInteger',
+		];
 	}
 
 	public function loadPost()
