@@ -1,0 +1,8 @@
+<h2>Add project</h2>
+
+<form ng-controller="ProjectsAddCtrl">
+	<label for="project.status">Status:</label> <select id="project-status" name="status" ng-model="project.status"></select><br>
+	<label for="project.status">Name:</label> <input type="text" id="project-name" name="name" ng-model="project.name" required><br>
+	<label for="project-description">Description:</label> <textarea id="project-description" name="description" ng-model="project.description"></textarea><br>
+	<input type="submit" ng-click="submit(project)" value="Add">
+</form>
