@@ -6,8 +6,9 @@ var projectServices = angular.module('projectServices', ['ngResource', 'authServ
  **/
 projectServices.factory('Projects', ['$resource', 'Authentication',
 	function ($resource, Authentication) {
-		return $resource('api/testdata/projects.json', {}, {
-			query: {method: 'GET', isArray: true},
+		userInfo = Authentication.getUserInfo();
+		return $resource('api/testdata/projects.json', { }, {
+			query: {method: 'POST', isArray: true, params: { authKey: userInfo.authKey }},
 			cache: false
 		});
 }]);

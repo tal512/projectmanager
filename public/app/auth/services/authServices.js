@@ -3,7 +3,7 @@ var authServices = angular.module('authServices', ['ngResource']);
 /**
  * http://www.sitepoint.com/implementing-authentication-angular-applications/
  */
-authServices.factory('Authentication', function($http, $q, $window) {
+authServices.factory('Authentication', function($http, $q, $window, $location) {
 	var userInfo;
 
 	/**
@@ -29,6 +29,7 @@ authServices.factory('Authentication', function($http, $q, $window) {
 					authKey: response.data.authKey
 				};
 				$window.sessionStorage['userInfo'] = JSON.stringify(userInfo);
+				$location.path('projects');
 			}
 			else {
 				alert("Login failed: " + response.data.message);

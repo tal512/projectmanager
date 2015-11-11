@@ -6,6 +6,7 @@ var projectManagerApp = angular.module('projectManagerApp', ['ui.router',
 	'projectControllers',
 	'projectServices',
 	'projectDirectives',
+	/*'projectStatusServices',*/
 	'navigationControllers',
 	'authControllers',
 	'authServices']);

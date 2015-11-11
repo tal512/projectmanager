@@ -1,7 +1,7 @@
 <h2>Login</h2>
 
 <form ng-controller="LoginCtrl">
-	Email: <input type="email" ng-model="user.email"><br>
-	Password: <input type="password" ng-model="user.password"><br>
+	<label for="user-email">Email:</label> <input id="user-email" type="email" ng-model="user.email"><br>
+	<label for="user-password">Password:</label> <input type="password" id="user-password" ng-model="user.password"><br>
 	<input type="submit" ng-click="submit(user)" value="Login">
 </form>
